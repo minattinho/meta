@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Desafio Personalizado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       background: linear-gradient(to right, #0f172a, #1e293b);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Inter', sans-serif;
       color: #e0f2fe;
       display: flex;
       justify-content: center;
@@ -19,8 +20,8 @@
     #app {
       background-color: #1e293b;
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       max-width: 600px;
       width: 100%;
     }
@@ -34,29 +35,44 @@
     textarea, input[type="number"] {
       width: 100%;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 0.375rem;
       border: none;
       font-size: 15px;
       margin-bottom: 15px;
       background-color: #334155;
       color: #e0f2fe;
+      outline: none;
+    }
+
+    input[type="number"] {
+      appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
     }
 
     button {
       width: 100%;
       padding: 12px;
       border: none;
-      border-radius: 8px;
+      border-radius: 0.375rem;
       background-color: #3b82f6;
       color: white;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.2s ease;
     }
 
     button:hover {
       background-color: #2563eb;
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     #dias-container {
@@ -69,7 +85,7 @@
     #dias-container button {
       background-color: #334155;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 0.375rem;
       font-weight: bold;
       transition: 0.3s;
     }
@@ -92,7 +108,7 @@
 
     .progress-bar {
       background-color: #334155;
-      border-radius: 20px;
+      border-radius: 9999px;
       overflow: hidden;
       height: 18px;
     }
@@ -114,6 +130,7 @@
       margin-top: 15px;
       text-decoration: underline;
       font-size: 14px;
+      cursor: pointer;
     }
   </style>
 </head>
