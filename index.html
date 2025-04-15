@@ -1,99 +1,126 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Desafio Personalizado</title>
   <style>
     body {
-      background-color: #0f172a;
-      color: white;
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      background: linear-gradient(to right, #0f172a, #1e293b);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #e0f2fe;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
+
     #app {
-      width: 100%;
-      max-width: 600px;
-      padding: 20px;
       background-color: #1e293b;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      width: 100%;
     }
+
     h1, h2 {
-      text-align: center;
       color: #60a5fa;
+      text-align: center;
+      margin-bottom: 10px;
     }
+
     textarea, input[type="number"] {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 8px;
       border: none;
-      border-radius: 5px;
-      font-size: 16px;
+      font-size: 15px;
+      margin-bottom: 15px;
+      background-color: #334155;
+      color: #e0f2fe;
     }
+
     button {
       width: 100%;
-      padding: 10px;
-      background-color: #3b82f6;
+      padding: 12px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      background-color: #3b82f6;
       color: white;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s;
-      margin-top: 10px;
     }
+
     button:hover {
       background-color: #2563eb;
     }
-    .hidden {
-      display: none;
-    }
-    .list-disc {
-      padding-left: 20px;
-    }
+
     #dias-container {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-top: 15px;
+      gap: 10px;
+      margin-top: 20px;
     }
+
     #dias-container button {
       background-color: #334155;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: 0.3s;
     }
+
     #dias-container button.checked {
       background-color: #22c55e;
+      color: black;
     }
+
     .progress-container {
-      margin: 20px 0;
+      margin-top: 25px;
+      margin-bottom: 15px;
     }
+
     .progress-text {
       font-size: 14px;
       margin-bottom: 5px;
+      color: #cbd5e1;
     }
+
     .progress-bar {
-      background-color: #1e293b;
-      border-radius: 10px;
+      background-color: #334155;
+      border-radius: 20px;
       overflow: hidden;
-      height: 16px;
+      height: 18px;
     }
+
     .progress-fill {
       height: 100%;
       background-color: #3b82f6;
       width: 0%;
       transition: width 0.3s;
     }
+
+    .hidden {
+      display: none;
+    }
+
+    .reset-btn {
+      background-color: transparent;
+      color: #f87171;
+      margin-top: 15px;
+      text-decoration: underline;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <div id="app">
     <div id="config">
-      <h1>Meus Desafios</h1>
+      <h1>Comece seu Desafio</h1>
       <textarea id="desafios" rows="4" placeholder="Digite seus desafios, um por linha..."></textarea>
       <input type="number" id="diasInput" min="1" max="100" placeholder="Quantidade de dias (ex: 30)" />
       <button onclick="iniciarDesafio()">Começar</button>
@@ -101,7 +128,7 @@
 
     <div id="progresso" class="hidden">
       <h2>Desafios:</h2>
-      <ul id="lista-desafios" class="list-disc"></ul>
+      <ul id="lista-desafios"></ul>
 
       <div class="progress-container">
         <div class="progress-text">Progresso: <span id="percentual">0%</span></div>
@@ -111,7 +138,7 @@
       </div>
 
       <div id="dias-container"></div>
-      <button onclick="resetar()" style="background-color: transparent; color: #f87171;">Resetar tudo</button>
+      <button onclick="resetar()" class="reset-btn">Resetar tudo</button>
     </div>
   </div>
 
@@ -124,7 +151,7 @@
     const percentualTexto = document.getElementById('percentual');
 
     function iniciarDesafio() {
-      const desafios = desafiosInput.value.trim().split('\n').filter(d => d);
+      const desafios = desafiosInput.value.trim().split('\\n').filter(d => d);
       const qtdDias = parseInt(diasInput.value);
 
       if (desafios.length === 0 || isNaN(qtdDias) || qtdDias < 1) {
