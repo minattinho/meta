@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desafio Personalizado</title>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    #app {
+      width: 100%;
+      max-width: 600px;
+      padding: 20px;
+      background-color: #1e293b;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #60a5fa;
+    }
+    textarea, input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #3b82f6;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    .hidden {
+      display: none;
+    }
+    .list-disc {
+      padding-left: 20px;
+    }
+    #dias-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 15px;
+    }
+    #dias-container button {
+      background-color: #334155;
+    }
+    #dias-container button.checked {
+      background-color: #22c55e;
+    }
+    .progress-container {
+      margin: 20px 0;
+    }
+    .progress-text {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .progress-bar {
+      background-color: #1e293b;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 16px;
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: #3b82f6;
+      width: 0%;
+      transition: width 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="config">
+      <h1>Meus Desafios</h1>
+      <textarea id="desafios" rows="4" placeholder="Digite seus desafios, um por linha..."></textarea>
+      <input type="number" id="diasInput" min="1" max="100" placeholder="Quantidade de dias (ex: 30)" />
+      <button onclick="iniciarDesafio()">Começar</button>
+    </div>
+
+    <div id="progresso" class="hidden">
+      <h2>Desafios:</h2>
+      <ul id="lista-desafios" class="list-disc"></ul>
+
+      <div class="progress-container">
+        <div class="progress-text">Progresso: <span id="percentual">0%</span></div>
+        <div class="progress-bar">
+          <div id="barra-progresso" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div id="dias-container"></div>
+      <button onclick="resetar()" style="background-color: transparent; color: #f87171;">Resetar tudo</button>
+    </div>
+  </div>
+
+  <script>
+    const diasContainer = document.getElementById('dias-container');
+    const listaDesafios = document.getElementById('lista-desafios');
+    const desafiosInput = document.getElementById('desafios');
+    const diasInput = document.getElementById('diasInput');
+    const barraProgresso = document.getElementById('barra-progresso');
+    const percentualTexto = document.getElementById('percentual');
+
+    function iniciarDesafio() {
+      const desafios = desafiosInput.value.trim().split('\n').filter(d => d);
+      const qtdDias = parseInt(diasInput.value);
+
+      if (desafios.length === 0 || isNaN(qtdDias) || qtdDias < 1) {
+        alert('Digite os desafios e a quantidade de dias.');
+        return;
+      }
+
+      localStorage.setItem('meusDesafios', JSON.stringify(desafios));
+      localStorage.setItem('quantidadeDias', qtdDias);
+      localStorage.setItem('diasConcluidos', JSON.stringify([]));
+      mostrarProgresso();
+    }
+
+    function mostrarProgresso() {
+      document.getElementById('config').classList.add('hidden');
+      document.getElementById('progresso').classList.remove('hidden');
+
+      const desafios = JSON.parse(localStorage.getItem('meusDesafios') || '[]');
+      const diasConcluidos = JSON.parse(localStorage.getItem('diasConcluidos') || '[]');
+      const qtdDias = parseInt(localStorage.getItem('quantidadeDias')) || 30;
+
+      listaDesafios.innerHTML = desafios.map(d => `<li>${d}</li>`).join('');
+      diasContainer.innerHTML = '';
+
+      for (let i = 1; i <= qtdDias; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = `Dia ${i}`;
+        if (diasConcluidos.includes(i)) btn.classList.add('checked');
+        btn.onclick = () => toggleDia(i);
+        diasContainer.appendChild(btn);
+      }
+
+      atualizarBarraProgresso(diasConcluidos.length, qtdDias);
+    }
+
+    function toggleDia(dia) {
+      let diasConcluidos = JSON.parse(localStorage.getItem('diasConcluidos') || '[]');
+      if (diasConcluidos.includes(dia)) {
+        diasConcluidos = diasConcluidos.filter(d => d !== dia);
+      } else {
+        diasConcluidos.push(dia);
+      }
+      localStorage.setItem('diasConcluidos', JSON.stringify(diasConcluidos));
+      mostrarProgresso();
+    }
+
+    function atualizarBarraProgresso(concluidos, total) {
+      const percentual = Math.round((concluidos / total) * 100);
+      barraProgresso.style.width = percentual + '%';
+      percentualTexto.textContent = percentual + '%';
+    }
+
+    function resetar() {
+      if (confirm('Tem certeza que quer resetar tudo?')) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+
+    if (localStorage.getItem('meusDesafios') && localStorage.getItem('quantidadeDias')) {
+      mostrarProgresso();
+    }
+  </script>
+</body>
+</html>
